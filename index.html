@@ -7,17 +7,16 @@
     <title>Template • TodoMVC</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
-    <!-- CSS overrides - remove if you don't need it -->
     <link rel="stylesheet" href="css/app.css">
     <script type="module" src="../element/element.js?load&expose"></script>
-
-
-
 </head>
 
 <body>
     <section class="todoapp">
-        <meta is="e-data" resource="|.todo-list" transform='{"`strong`": $.childElementCount}' target="|footer">
+        <meta is="e-data" resource="|.todo-list"
+            transform='{"`strong`": $.childElementCount, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'
+            target="|footer">
+        <meta is="e-data" resource="|.new-todo|_">
 
         <header class="header">
             <h1>todos</h1>
@@ -51,8 +50,9 @@
     </section>
     <footer class="info">
         <p>Double-click to edit a todo</p>
-        <!-- Change this out with your name and url ↓ -->
-        <p>Created by <a href="http://drpitman.name">David Pitman</a> using <a href="http://elementhtml.dev">Element</a>
+        <p>
+            Created by <a href="http://drpitman.name">David Pitman</a> using <a
+                href="http://elementhtml.dev">Element</a>
         </p>
         <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
     </footer>

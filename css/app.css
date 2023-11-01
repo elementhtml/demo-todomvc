@@ -24,3 +24,7 @@ main:has(li),
 main:has(li)+footer {
     display: block;
 }
+
+.clear-completed[disabled] {
+    display: none;
+}
