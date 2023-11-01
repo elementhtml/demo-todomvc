@@ -11,13 +11,13 @@
     <link rel="stylesheet" href="css/app.css">
     <script type="module" src="../element/element.js?load&expose"></script>
 
-    <meta is="e-data" resource=":root|.todo-list" transform="$.childElementCount" target=":root|.todo-count strong">
 
 
 </head>
 
 <body>
     <section class="todoapp">
+        <meta is="e-data" resource="|.todo-list" transform='{"`strong`": $.childElementCount}' target="|footer">
 
         <header class="header">
             <h1>todos</h1>
@@ -32,7 +32,6 @@
             </ul>
         </main>
         <footer>
-            <!-- This should be `0 items left` by default -->
             <span class="todo-count"><strong>0</strong> items left</span>
             <!-- Remove this if you don't implement routing -->
             <ul class="filters">
