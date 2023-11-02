@@ -13,10 +13,9 @@
 
 <body>
     <section class="todoapp">
-        <meta is="e-data" resource="|.todo-list"
-            transform='{"`strong`": $.childElementCount, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'
-            target="|footer">
-        <meta is="e-data" resource="|.new-todo|_">
+        <meta is="e-data" resource="|.todo-list" target="|footer"
+            transform='{"`strong`": $.childElementCount, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'>
+        <meta is="e-data" resource="|.new-todo|_" target="`sessionStorage.setItem`" transform='["todos", $]'>
 
         <header class="header">
             <h1>todos</h1>
