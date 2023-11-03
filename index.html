@@ -14,7 +14,7 @@
 <body>
     <section class="todoapp">
         <meta is="e-data" resource="|.new-todo|_" target="`sessionStorage`" apply="setItem(...)" id="new-todo-processor"
-            transform='["todo", "[\"" & $join([$filter([$append($sessionStorage.todo, $)], function($v){ $v != ""})], "\",\"") & "\"]"  ]'>
+            transform='["todo", "[\"" & $join([$filter([$append($sessionStorage.todo, $)], function($v){ $trim($v) != ""})], "\",\"") & "\"]"  ]'>
         <meta is="e-data" resource="|#new-todo-processor|!"
             transform='{"`.todo-list`": $sessionStorage.todo, "`.new-todo`": ""}'>
         <meta is="e-data" resource="|.todo-list" target="|footer"
