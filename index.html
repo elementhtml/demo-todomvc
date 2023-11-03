@@ -12,17 +12,9 @@
 </head>
 
 <body>
-    <template data-e-fragment="todo-inner">
-        <div class="view">
-            <input class="toggle" type="checkbox">
-            <label>Buy a unicorn</label>
-            <button class="destroy"></button>
-        </div>
-        <input class="edit" value="Rule the web">
-    </template>
     <section class="todoapp">
         <meta is="e-data" resource="|.todo-list" target="|footer"
-            transform='{"`strong`": $.childElementCount-1, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'>
+            transform='{"`strong`": $.childElementCount-2, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'>
         <meta is="e-data" resource="|.new-todo|_" target="`sessionStorage`" id="new-todo-processor"
             transform='["todo", "[\"" & $join([$filter([$distinct($append($sessionStorage.todo, $))], function($v){ $v != ""})], "\",\"") & "\"]"  ]'
             apply="setItem(...)">
@@ -37,9 +29,17 @@
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
+                <template data-e-fragment id="todo-inner">
+                    <div class="view">
+                        <input class="toggle" type="checkbox">
+                        <label>TODO</label>
+                        <button class="destroy"></button>
+                    </div>
+                    <input class="edit" value="Rule the web">
+                </template>
                 <template data-e-sink="false">
                     <li>
-                        <template data-e-use="todo-inner" data-e-merge='unicorn=$'></template>
+                        <template data-e-use="#todo-inner" data-e-merge='TODO=$'></template>
                     </li>
                 </template>
             </ul>
