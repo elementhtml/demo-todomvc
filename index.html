@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Template • TodoMVC</title>
+    <title>Element • TodoMVC</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
@@ -19,6 +19,7 @@
             transform='["todo", "[\"" & $join([$filter([$distinct($append($sessionStorage.todo, $))], function($v){ $v != ""})], "\",\"") & "\"]"  ]'
             apply="setItem(...)">
         <meta is="e-data" resource="|#new-todo-processor|!" target="|.todo-list" transform='$sessionStorage.todo'>
+        <meta is="e-data" resource="|#new-todo-processor|!" target="|.new-todo" transform='{".value": $random()}'>
         <!-- <meta is="e-data" resource="|.new-todo|_" target="`console`" transform='$sessionStorage.todo' apply="log(...)"> -->
 
         <header class="header">
