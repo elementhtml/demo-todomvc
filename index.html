@@ -34,13 +34,15 @@
             <ul class="todo-list">
                 <template data-e-fragment id="todo-inner">
                     <div class="view">
-                        <meta is="e-data" resource="div|input" target="li|"
+                        <meta is="e-data" resource="|input" target="li|"
                             transform='{"@class": $.checked ? "completed" : null }'>
+                        <meta is="e-data" resource="|label|_dblclick" target="li|"
+                            transform='{"@class": "editing", "`.edit`.value": $}'>
                         <input class="toggle" type="checkbox">
                         <label>TODO</label>
                         <button class="destroy"></button>
                     </div>
-                    <input class="edit" value="Rule the web">
+                    <input class="edit" value="">
                 </template>
                 <template data-e-sink="false">
                     <li>
