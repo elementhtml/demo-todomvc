@@ -13,22 +13,26 @@
 
 <body>
     <section class="todoapp">
-        <meta is="e-data" resource="|.new-todo|_" target="`sessionStorage`" apply="setItem(...)" id="new-todo-processor"
-            transform='["todo", "[\"" & $join([$filter([$append($sessionStorage.todo, $)], function($v){ $trim($v) != ""})], "\",\"") & "\"]"  ]'>
         <meta is="e-data" resource="#new-todo-processor"
             transform='{"`.todo-list`": $sessionStorage.todo, "`.new-todo`": ""}'>
         <meta is="e-data" resource="|.todo-list" target="|footer"
             transform='{"`strong`": $.childElementCount-2, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'>
-        <meta is="e-data" resource="#toggle-all" target="|.toggle{}"
-            transform='{".checked": $.checked, "class": $.checked ? "completed": null }'>
 
-        <!-- <meta is="e-data" resource="|.new-todo|_" target="`console`" transform='$sessionStorage.todo' apply="log(...)"> -->
+
 
         <header class="header">
+            <meta is="e-data" resource="|.new-todo|$" target="`console`" apply="log(...)" id="test" transform='$' force>
+
+            <meta is="e-data" resource="|.new-todo|_" target="`sessionStorage`" apply="setItem(...)"
+                id="new-todo-processor"
+                transform='["todo", "[\"" & $join([$filter([$append($sessionStorage.todo, $)], function($v){ $trim($v) != ""})], "\",\"") & "\"]"  ]'>
+
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
         </header>
         <main>
+            <meta is="e-data" resource="#toggle-all" target="|.toggle{}"
+                transform='{".checked": $.checked, "class": $.checked ? "completed": null }'>
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
