@@ -13,8 +13,8 @@
 
 <body>
     <section class="todoapp">
-        <meta is="e-pipe" via="`sessionStorage.setItem(todo)!getItem(todo)`" id="storage">
-        <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="send">
+        <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+">
+        <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write">
 
         <!--<meta is="e-data" resource="#new-todo-processor"
             transform='{"`.todo-list`": $sessionStorage.todo, "`.new-todo`": ""}'>
