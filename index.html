@@ -13,7 +13,8 @@
 
 <body>
     <section class="todoapp">
-        <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+">
+        <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+"
+            content-type="json">
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write">
 
         <!--<meta is="e-data" resource="#new-todo-processor"
