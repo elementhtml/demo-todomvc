@@ -16,15 +16,11 @@
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+"
             content-type="json">
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" transform='{"`label`": $}' apply="write">
-        <meta is="e-data" resource="|#storage|_"
-            transform='{"`.new-todo`": "", "`.todo-list`": $, "`footer strong`": $count($)}'>
-
-        <!--<meta is="e-data" resource="|.todo-list" target="|footer"
-            transform='{"`strong`": $.childElementCount-2, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'>-->
+        <meta is="e-data" resource="|#storage|_" transform='{
+            "`.new-todo`": "", "`.todo-list`": $, 
+            "`footer strong`": $count($), "`footer .clear-completed`@disabled": ($count($[`@class`="completed"])>0) ? null : "" 
+        }'>
         <header class="header">
-            <!--<meta is="e-data" resource="|.new-todo|_" target="`sessionStorage`" apply="setItem(...)"
-                id="new-todo-processor"
-                transform='["todo", "[\"" & $join([$filter([$append($sessionStorage.todo, $)], function($v){ $trim($v) != ""})], "\",\"") & "\"]"  ]'>-->
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
         </header>
