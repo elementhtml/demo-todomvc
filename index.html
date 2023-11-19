@@ -16,11 +16,10 @@
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+"
             content-type="json">
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write">
-        <meta is="e-data" resource="|#storage|_" target="|" transform='{"`.todo-list`": $, "`.new-todo`": ""}'>
+        <meta is="e-data" resource="|#storage|_"
+            transform='{"`.new-todo`": "", "`.todo-list`": $, "`footer strong`": $count($)}'>
 
-        <!--<meta is="e-data" resource="#new-todo-processor"
-            transform='{"`.todo-list`": $sessionStorage.todo, "`.new-todo`": ""}'>
-        <meta is="e-data" resource="|.todo-list" target="|footer"
+        <!--<meta is="e-data" resource="|.todo-list" target="|footer"
             transform='{"`strong`": $.childElementCount-2, "`.clear-completed`@disabled": $contains($.innerHTML, "li class=\"completed\"") ? null : "" }'>-->
         <header class="header">
             <!--<meta is="e-data" resource="|.new-todo|_" target="`sessionStorage`" apply="setItem(...)"
