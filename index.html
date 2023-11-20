@@ -27,15 +27,13 @@
             "`footer strong`": $numAll, 
             "`footer .clear-completed`@data-completed": $numCompleted 
         })'>
+        <meta is="e-data" resource="|#toggle-all|!change" target="|#storage" transform='$.target.checked'
+            apply='write(,toggleAll)'>
         <header class="header">
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
         </header>
         <main>
-            <!--<meta is="e-data" resource="|li{}" target="|"
-                transform='{"`#toggle-all`.checked": (($count($) > 0) and ($count($.`@class`) = $count($))) }'>-->
-            <meta is="e-data" resource="|#toggle-all|!change" target="section|#storage" transform='$.target.checked'
-                apply='write(,toggleAll)'>
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
