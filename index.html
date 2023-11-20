@@ -18,13 +18,15 @@
             data-toggle-all='$merge($map($keys($value), function($k) {{$k: $merge([$lookup($value, $k), {"@class": $ ? "completed" : "active" }])}}))'>
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {$id: {"`label`": $t, "@class": "active"}} : null)'>
-        <meta is="e-data" resource="|#storage|_" transform='{
-            "`#toggle-all`.checked": $count($filter($.*,function($v){$v.`@class`="completed"})) = $count($.*), 
+        <meta is="e-data" resource="|#storage|_" transform='(
+            $numCompleted := $count($filter($.*,function($v){$v.`@class`="completed"})); $numAll := $count($.*); 
+            {
+            "`#toggle-all`.checked": $numCompleted = $numAll, 
             "`.new-todo`": "", 
             "`.todo-list`": [$each($, function($v, $k) {$merge([{"`input`@id": $k, "`input`.checked": ($v.`@class` = "completed") }, $v])})], 
-            "`footer strong`": $count($keys($)), 
-            "`footer .clear-completed`@data-completed": $count($filter($.*,function($v){$v.`@class`="completed"})) 
-        }'>
+            "`footer strong`": $numAll, 
+            "`footer .clear-completed`@data-completed": $numCompleted 
+        })'>
         <header class="header">
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
