@@ -14,11 +14,11 @@
 <body>
     <section class="todoapp">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" content-type="json"
-            transform="[]+">
+            transform="{}">
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
-            transform='($t:=$trim($); $length($t)>0 ? {"`label`": $t} : null)'>
+            transform='($t:=$trim($); $length($t)>0 ? {$uuid: {"`label`": $t}} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='{
-            "`.new-todo`": "", "`.todo-list`": $, 
+            "`.new-todo`": "", "`.todo-list`": [$each($, function($v, $k) {$merge([{"@id": $k}, $v])})], 
             "`footer strong`": $count($), "`footer .clear-completed`@disabled": ($count($[`@class`="completed"])>0) ? null : "" 
         }'>
         <header class="header">
