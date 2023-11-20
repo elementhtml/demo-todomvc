@@ -25,6 +25,6 @@ main:has(li)+footer {
     display: block;
 }
 
-.clear-completed[disabled] {
+.clear-completed[data-completed="0"] {
     display: none;
 }

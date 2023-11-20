@@ -20,7 +20,8 @@
         <meta is="e-data" resource="|#storage|_" transform='{
             "`.new-todo`": "", 
             "`.todo-list`": [$each($, function($v, $k) {$merge([{"`input`@id": $k, "`input`.checked": ($v.`@class` = "completed") }, $v])})], 
-            "`footer strong`": $count($), "`footer .clear-completed`@disabled": ($count($[`@class`="completed"])>0) ? null : "" 
+            "`footer strong`": $count($keys($)), 
+            "`footer .clear-completed`@data-completed": $count($filter($.*,function($v){$v.`@class`="completed"})) 
         }'>
         <header class="header">
             <h1>todos</h1>
