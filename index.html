@@ -13,10 +13,10 @@
 
 <body>
     <section class="todoapp">
-        <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+"
-            content-type="json">
-        <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write"
-            transform='($t:=$trim($);$l:=$length($t); $l>0 ? {"`label`": $t} : null)'>
+        <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" content-type="json"
+            transform="[]+" data-prepend="+[]">
+        <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write(,prepend)"
+            transform='($t:=$trim($); $length($t)>0 ? {"`label`": $t} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='{
             "`.new-todo`": "", "`.todo-list`": $, 
             "`footer strong`": $count($), "`footer .clear-completed`@disabled": ($count($[`@class`="completed"])>0) ? null : "" 
@@ -30,6 +30,7 @@
                 transform='{"`#toggle-all`.checked": (($count($) > 0) and ($count($.`@class`) = $count($))) }'>
             <meta is="e-data" resource="#toggle-all" target="|li{}"
                 transform='{"@class": $.checked ? "completed" : null, "`.toggle`.checked": $.checked}'>-->
+            <meta is="e-data" resource="|#toggle-all" target="section|#storage" apply="write" transform="">
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
