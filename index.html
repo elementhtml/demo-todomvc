@@ -18,7 +18,8 @@
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {$id: {"`label`": $t, "@class": "active"}} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='{
-            "`.new-todo`": "", "`.todo-list`": [$each($, function($v, $k) {$merge([{"`input`@id": $k}, $v])})], 
+            "`.new-todo`": "", 
+            "`.todo-list`": [$each($, function($v, $k) {$merge([{"`input`@id": $k, "`input`.checked": ($v.`@class` = "completed") }, $v])})], 
             "`footer strong`": $count($), "`footer .clear-completed`@disabled": ($count($[`@class`="completed"])>0) ? null : "" 
         }'>
         <header class="header">
