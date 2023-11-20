@@ -14,7 +14,7 @@
 <body>
     <section class="todoapp">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" content-type="json"
-            transform="[]+" data-prepend="+[]">
+            transform="[]+">
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {"`label`": $t} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='{
@@ -30,14 +30,15 @@
                 transform='{"`#toggle-all`.checked": (($count($) > 0) and ($count($.`@class`) = $count($))) }'>
             <meta is="e-data" resource="#toggle-all" target="|li{}"
                 transform='{"@class": $.checked ? "completed" : null, "`.toggle`.checked": $.checked}'>-->
-            <meta is="e-data" resource="|#toggle-all" target="section|#storage" apply="write" transform="">
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
                 <template>
                     <li>
                         <div class="view">
-                            <meta is="e-data" resource="|input" target="section|#storage" apply="write()" transform="">
+                            <!--<meta is="e-data" resource="|input" target="section|#storage" apply="write(,``)"
+                                transform='{"@class": $.checked ? "completed" : null}'>-->
+
                             <!--<meta is="e-data" resource="|input" target="li|"
                                 transform='{ "@class": $.checked ? "completed" : null }'>-->
                             <!--<meta is="e-data" resource="|label|_dblclick" target="li|"
