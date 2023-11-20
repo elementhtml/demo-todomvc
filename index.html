@@ -19,12 +19,13 @@
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {$id: {"`label`": $t, "@class": "active"}} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='(
-            $numCompleted := $count($filter($.*,function($v){$v.`@class`="completed"})); $numAll := $count($.*); 
+            $numCompleted := $count($filter($.*,function($v){$v.`@class`="completed"})); $numAll := $count($.*); $numActive := $numAll - $numCompleted; 
             {
             "`#toggle-all`.checked": $numCompleted = $numAll, 
             "`.new-todo`": "", 
             "`.todo-list`": [$each($, function($v, $k) {$merge([{"`input`@id": $k, "`input`.checked": ($v.`@class` = "completed") }, $v])})], 
-            "`footer strong`": $numAll, 
+            "`footer .todo-count strong`": $numActive, 
+            "`footer .todo-count span`": $numActive = 1 ? "item" : "items", 
             "`footer .clear-completed`@data-completed": $numCompleted 
         })'>
         <meta is="e-data" resource="|#toggle-all|!change" target="|#storage" transform='$.target.checked'
@@ -58,7 +59,7 @@
             </ul>
         </main>
         <footer>
-            <span class="todo-count"><strong>0</strong> items left</span>
+            <span class="todo-count"><strong>0</strong> <span>item</span> left</span>
             <!-- Remove this if you don't implement routing -->
             <ul class="filters">
                 <li>
