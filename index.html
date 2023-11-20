@@ -14,7 +14,8 @@
 <body>
     <section class="todoapp">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" content-type="json"
-            transform="{}">
+            transform="{}"
+            data-toggle-all='$merge($map($keys($value), function($k) {{$k: $merge([$lookup($value, $k), {"@class": $ ? "completed" : "active" }])}}))'>
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {$id: {"`label`": $t, "@class": "active"}} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='{
@@ -29,9 +30,9 @@
         </header>
         <main>
             <!--<meta is="e-data" resource="|li{}" target="|"
-                transform='{"`#toggle-all`.checked": (($count($) > 0) and ($count($.`@class`) = $count($))) }'>
-            <meta is="e-data" resource="#toggle-all" target="|li{}"
-                transform='{"@class": $.checked ? "completed" : null, "`.toggle`.checked": $.checked}'>-->
+                transform='{"`#toggle-all`.checked": (($count($) > 0) and ($count($.`@class`) = $count($))) }'>-->
+            <meta is="e-data" resource="|#toggle-all|!change" target="section|#storage" transform='$.target.checked'
+                apply='write(,toggleAll)'>
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
             <ul class="todo-list">
