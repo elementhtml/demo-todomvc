@@ -15,7 +15,8 @@
     <section class="todoapp">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todo)!getItem(todo)`" transform="[]+"
             content-type="json">
-        <meta is="e-data" resource="|.new-todo|_" target="|#storage" transform='{"`label`": $trim($)}' apply="write">
+        <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write"
+            transform='($t:=$trim($);$l:=$length($t); $l>0 ? {"`label`": $t} : null)'>
         <meta is="e-data" resource="|#storage|_" transform='{
             "`.new-todo`": "", "`.todo-list`": $, 
             "`footer strong`": $count($), "`footer .clear-completed`@disabled": ($count($[`@class`="completed"])>0) ? null : "" 
