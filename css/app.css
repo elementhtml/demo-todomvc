@@ -32,3 +32,15 @@ main:has(li)+footer {
 .destroy {
     cursor: pointer;
 }
+
+/*.todo-list li {
+    display: none;
+}*/
+
+/*
+.todo-list[data-state="active"] li.active,
+.todo-list:not([data-state]) li.active,
+.todo-list[data-state="completed"] li.completed,
+.todo-list:not([data-state]) li.completed {
+    display: list-item;
+}*/

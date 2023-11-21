@@ -20,15 +20,26 @@
         <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {"id": $id, "title": $t, "completed": false} : null)'>
         <meta is="e-data" resource="#storage|_" transform='(
+            $s := $substringAfter($this.baseURI, "#/");
             $numCompleted := $count($filter($,function($v){$v.completed})); $numAll := $count($); $numActive := $numAll - $numCompleted; {
             "`#toggle-all`.checked": $numCompleted = $numAll, 
             "`.new-todo`": "", 
-            "`.todo-list`": [$map($, function($t, $i) {{"@id": $t.id, "@data-index": $i, "@class": $t.completed ? "completed" : "active", "`label`": $t.title, "`.toggle`.checked": $t.completed}})], 
+            "`.todo-list`": [$filter([$map($, function($t, $i) {{"@id": $t.id, "@data-index": $i, "@class": $t.completed ? "completed" : "active", 
+                "`label`": $t.title, "`.toggle`.checked": $t.completed}})], function($t) { $s ? $t.`@class` = $s : true })], 
             "`footer .todo-count strong`": $numActive, 
             "`footer .todo-count span`": $numActive = 1 ? "item" : "items", 
-            "`footer .clear-completed`completed": $numCompleted})'>
+            "`footer .clear-completed`completed": $numCompleted, 
+        
+            "`.todo-list`@data-state": $s ? ($s = "active" ? "active" : "completed" ) : null , 
+            "`footer a[href=\"#/completed\"]`@class": $s ? ($s = "active" ? "" : "selected" ) : "", 
+            "`footer a[href=\"#/active\"]`@class": $s ? ($s = "active" ? "selected" : "" ) : "", 
+            "`footer a[href=\"#/\"]`@class": $s ? "" : "selected"
+
+        })'>
         <meta is="e-data" resource="|#toggle-all|!change" target="#storage" transform='$.target.checked'
             apply='write(,toggleCompleteAll)'>
+
+
         <header class="header">
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
@@ -67,14 +78,6 @@
         <footer>
             <span class="todo-count"><strong>0</strong> <span>item</span> left</span>
             <ul class="filters">
-                <meta is="e-data" resource="|" target="|li{}" transform='( $s := $substringAfter($.baseURI, "#/"); $u := "#/" & $s;$s 
-                ? 
-                    ( $s = "active" 
-                        ? {"`a[href=\"#/completed\"]`@class": null, "`a[href=\"#/active\"]`@class": "selected", "`a[href=\"#/\"]`@class": null}
-                        : {"`a[href=\"#/completed\"]`@class": "selected", "`a[href=\"#/active\"]`@class": null, "`a[href=\"#/\"]`@class": null}
-                    )
-                : {"`a[href=\"#/completed\"]`@class": null, "`a[href=\"#/active\"]`@class": null, "`a[href=\"#/\"]`@class": "selected"}
-                )'>
                 <li>
                     <a href="#/">All</a>
                 </li>
@@ -85,7 +88,7 @@
                     <a href="#/completed">Completed</a>
                 </li>
             </ul>
-            <meta is="e-data" resource="|.clear-completed|!" target=".todoapp|li.completed{}"
+            <meta is="e-data" resource="|.clear-completed|!click" target=".todoapp|li.completed{}"
                 transform='{"`.destroy`!": ""}'>
             <button class="clear-completed">Clear completed</button>
         </footer>
