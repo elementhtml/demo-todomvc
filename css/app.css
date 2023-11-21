@@ -28,3 +28,7 @@ main:has(li)+footer {
 .clear-completed[data-completed="0"] {
     display: none;
 }
+
+.destroy {
+    cursor: pointer;
+}

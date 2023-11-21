@@ -14,7 +14,7 @@
 <body>
     <section class="todoapp">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todos-elementhtml)!getItem(todos-elementhtml)`"
-            content-type="json" transform="[]+"
+            content-type="json" transform="[]+" data-remove-by-index='$filter($value, function($t, $i) { $i != $ })'
             data-merge-by-index='$map($value, function($t, $i) { $i = $.index ? $merge([$t, $.update]) : $t })'
             data-toggle-complete-all='$map($value, function($t) { $merge([$t, {"completed": $}])})'>
         <meta is="e-data" resource="|.new-todo|_" target="|#storage" apply="write()"
@@ -24,10 +24,10 @@
             {
             "`#toggle-all`.checked": $numCompleted = $numAll, 
             "`.new-todo`": "", 
-            "`.todo-list`": [$map($, function($t, $i) {{"@id": $t.id, "`label`": $t.title, "`meta[is=e-data]`@name": $i, "`.toggle`.checked": $t.completed, "@class": $t.completed ? "completed" : "active"}})], 
+            "`.todo-list`": [$map($, function($t, $i) {{"@id": $t.id, "@data-index": $i, "@class": $t.completed ? "completed" : null, "`label`": $t.title, "`.toggle`.checked": $t.completed}})], 
             "`footer .todo-count strong`": $numActive, 
             "`footer .todo-count span`": $numActive = 1 ? "item" : "items", 
-            "`footer .clear-completed`@data-completed": $numCompleted 
+            "`footer .clear-completed`completed": $numCompleted 
         })'>
         <meta is="e-data" resource="|#toggle-all|!change" target="|#storage" transform='$.target.checked'
             apply='write(,toggleCompleteAll)'>
@@ -44,7 +44,9 @@
                         <div class="view">
                             <meta is="e-data" resource="|input|!click" target="section|#storage"
                                 apply="write(,mergeByIndex)"
-                                transform='{"index": $number($this.name), "update": {"completed": $.target.checked ? true : false }}'>
+                                transform='{"index": $number($find("li").`@data-index`), "update": {"completed": $.target.checked ? true : false }}'>
+                            <meta is="e-data" resource="|.destroy|!click" target="section|#storage"
+                                apply="write(,removeByIndex)" transform='$number($find("li").`@data-index`)'>
 
                             <!--<meta is="e-data" resource="|label|_dblclick" target="li|"
                                 transform='{"@class": "editing", "`.edit`.value": $}'>-->
