@@ -56,13 +56,13 @@
                             <meta is="e-data" resource="|label|_dblclick" target="li|" force
                                 transform='{"@class": "editing", "@data-class": $find("li").`@class`, "`.edit`.value": $, "`.edit`.focus()": null}'>
                             <meta is="e-data" resource="li|.edit|!keydown" target="li|"
-                                transform='($class := $find("li").`@data-class`; $.key = "Escape" ? {"@class": $class, "@data-class": null, "`.edit`.value": ""} : {})'>
+                                transform='($class := $find("li").`@data-class`; $.key = "Escape" ? {"@class": $class, "@data-class": null, "`.edit`.value": $find("li|label").textContent } : {})'>
                             <meta is="e-data" resource="li|.edit|!keydown,blur,change" target="#storage"
                                 apply="write(,mergeByIndex)" transform='($.type = "change")
                                 ? ($trim($.target.value) 
-                                    ? {"index": $number($find("li").`@data-index`), "update": { "title": $.target.value }} 
+                                    ? {"index": $number($find("li").`@data-index`), "update": { "title": $trim($.target.value) }} 
                                     : {"index": $number($find("li").`@data-index`), "update": false} )
-                                : (((($.key = "Enter") or ($.key = "Tab") or ($.type = "change") or ($.type = "blur")) and $not($.target.value)) 
+                                : (((($.key = "Enter") or ($.key = "Tab") or ($.type = "change") or ($.type = "blur")) and $not($trim($.target.value))) 
                                     ? {"index": $number($find("li").`@data-index`), "update": false} : {"index": -1})'>
                             <input class="toggle" type="checkbox">
                             <label></label>
