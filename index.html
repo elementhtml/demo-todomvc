@@ -13,10 +13,16 @@
 
 <body>
     <section class="todoapp">
+        <meta is="e-router" id="router">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todos-elementhtml)!getItem(todos-elementhtml)`"
             content-type="json" transform="[]+"
             data-merge-by-index='$filter($map($value, function($t, $i) { $i = $.index ? ($.update ? $merge([$t, $.update]) : false) : $t }), function($v) { $v })'
             data-toggle-complete-all='$map($value, function($t) { $merge([$t, {"completed": $}])})'>
+
+
+        <meta is="e-data" resource="|#router|!change" target="#storage" apply="!change" force>
+
+
         <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {"id": $id, "title": $t, "completed": false} : null)'>
         <meta is="e-data" resource="#storage|_" transform='(
@@ -76,7 +82,6 @@
         <footer>
             <span class="todo-count"><strong>0</strong> <span>item</span> left</span>
             <ul class="filters">
-                <meta is="e-data" resource="||!click" target="#storage" apply="!change" force>
                 <li>
                     <a href="#/">All</a>
                 </li>
