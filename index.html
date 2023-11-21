@@ -29,17 +29,15 @@
             "`footer .todo-count strong`": $numActive, 
             "`footer .todo-count span`": $numActive = 1 ? "item" : "items", 
             "`footer .clear-completed`completed": $numCompleted, 
-        
             "`.todo-list`@data-state": $s ? ($s = "active" ? "active" : "completed" ) : null , 
             "`footer a[href=\"#/completed\"]`@class": $s ? ($s = "active" ? "" : "selected" ) : "", 
             "`footer a[href=\"#/active\"]`@class": $s ? ($s = "active" ? "selected" : "" ) : "", 
             "`footer a[href=\"#/\"]`@class": $s ? "" : "selected"
-
         })'>
         <meta is="e-data" resource="|#toggle-all|!change" target="#storage" transform='$.target.checked'
             apply='write(,toggleCompleteAll)'>
-
-
+        <meta is="e-data" resource="|footer .clear-completed|!click" target=".todoapp|li.completed{}"
+            transform='{"`.destroy`!": ""}'>
         <header class="header">
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
@@ -88,8 +86,6 @@
                     <a href="#/completed">Completed</a>
                 </li>
             </ul>
-            <meta is="e-data" resource="|.clear-completed|!click" target=".todoapp|li.completed{}"
-                transform='{"`.destroy`!": ""}'>
             <button class="clear-completed">Clear completed</button>
         </footer>
     </section>
