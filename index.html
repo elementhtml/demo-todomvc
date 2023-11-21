@@ -24,7 +24,7 @@
             {
             "`#toggle-all`.checked": $numCompleted = $numAll, 
             "`.new-todo`": "", 
-            "`.todo-list`": [$map($, function($t, $i) {{"@id": $t.id, "@data-index": $i, "@class": $t.completed ? "completed" : null, "`label`": $t.title, "`.toggle`.checked": $t.completed}})], 
+            "`.todo-list`": [$map($, function($t, $i) {{"@id": $t.id, "@data-index": $i, "@class": $t.completed ? "completed" : "active", "`label`": $t.title, "`.toggle`.checked": $t.completed}})], 
             "`footer .todo-count strong`": $numActive, 
             "`footer .todo-count span`": $numActive = 1 ? "item" : "items", 
             "`footer .clear-completed`completed": $numCompleted 
@@ -47,8 +47,13 @@
                             <meta is="e-data" resource="|.destroy|!click" target="#storage"
                                 apply="write(,removeByIndex)" transform='$number($find("li").`@data-index`)'>
 
-                            <!--<meta is="e-data" resource="|label|_dblclick" target="li|"
-                                transform='{"@class": "editing", "`.edit`.value": $}'>-->
+                            <meta is="e-data" resource="|label|_dblclick" target="li|"
+                                transform='{"@class": "editing", "@data-class": $find("li").`@class`, "`.edit`.value": $}'>
+                            <meta is="e-data" resource="li|.edit|_" target="#storage" apply="write(,mergeByIndex)"
+                                transform='{"index": $number($find("li").`@data-index`), "update": { "title": $ }}'>
+                            <meta is="e-data" resource="li|.edit|!keydown" target="li|"
+                                transform='($class := $find("li").`@data-class`; $.key = "Escape" ? {"@class": $class, "@data-class": null, "`.edit`.value": ""} : {})'>
+
                             <input class="toggle" type="checkbox">
                             <label>TODO</label>
                             <button class="destroy"></button>
