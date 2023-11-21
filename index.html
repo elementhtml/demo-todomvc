@@ -14,7 +14,7 @@
 <body>
     <section class="todoapp">
         <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todos-elementhtml)!getItem(todos-elementhtml)`"
-            content-type="json" transform="[]+" data-remove-by-index='$filter($value, function($t, $i) { $i != $ })'
+            content-type="json" transform="[]+"
             data-merge-by-index='$filter($map($value, function($t, $i) { $i = $.index ? ($.update ? $merge([$t, $.update]) : false) : $t }), function($v) { $v })'
             data-toggle-complete-all='$map($value, function($t) { $merge([$t, {"completed": $}])})'>
         <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()"
@@ -57,6 +57,12 @@
 
                             <meta is="e-data" resource="li|.edit|!keydown" target="li|"
                                 transform='($class := $find("li").`@data-class`; $.key = "Escape" ? {"@class": $class, "@data-class": null, "`.edit`.value": ""} : {})'>
+
+                            <meta is="e-data" resource="li|.edit|!keydown,blur" target="#storage"
+                                apply="write(,mergeByIndex)" transform='((($.key = "Enter") or ($.key = "Tab") or ($.type = "blur")) and $not($.target.value)) 
+                                ? {"index": $number($find("li").`@data-index`), "update": false} : {"index": -1}
+                            '>
+
 
                             <input class="toggle" type="checkbox">
                             <label>TODO</label>
