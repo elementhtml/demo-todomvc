@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Element • TodoMVC</title>
+    <title>ElementHTML • TodoMVC</title>
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
@@ -14,7 +14,7 @@
 <body>
     <section class="todoapp">
         <meta is="e-router" id="router">
-        <meta is="e-pipe" id="storage" source="`sessionStorage.setItem(todos-elementhtml)!getItem(todos-elementhtml)`"
+        <meta is="e-pipe" id="storage" source="`localStorage.setItem(todos-elementhtml)!getItem(todos-elementhtml)`"
             content-type="json" transform="[]+"
             data-merge-by-index='$filter($map($value, function($t, $i) { $i = $.index ? ($.update ? $merge([$t, $.update]) : false) : $t }), function($v) { $v })'
             data-toggle-complete-all='$map($value, function($t) { $merge([$t, {"completed": $}])})'>
