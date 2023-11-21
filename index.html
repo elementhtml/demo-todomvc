@@ -49,18 +49,24 @@
                             <meta is="e-data" resource="|label|_dblclick" target="li|" force
                                 transform='{"@class": "editing", "@data-class": $find("li").`@class`, "`.edit`.value": $, "`.edit`.focus()": null}'>
 
-                            <meta is="e-data" resource="li|.edit|_" target="#storage" apply="write(,mergeByIndex)"
+                            <!--<meta is="e-data" resource="li|.edit|_" target="#storage" apply="write(,mergeByIndex)"
                                 transform='$length($trim($))>0 
                                 ? {"index": $number($find("li").`@data-index`), "update": { "title": $ }} 
                                 : {"index": $number($find("li").`@data-index`), "update": false}
-                            '>
+                            '>-->
 
                             <meta is="e-data" resource="li|.edit|!keydown" target="li|"
                                 transform='($class := $find("li").`@data-class`; $.key = "Escape" ? {"@class": $class, "@data-class": null, "`.edit`.value": ""} : {})'>
 
                             <meta is="e-data" resource="li|.edit|!keydown,blur" target="#storage"
-                                apply="write(,mergeByIndex)" transform='((($.key = "Enter") or ($.key = "Tab") or ($.type = "blur")) and $not($.target.value)) 
-                                ? {"index": $number($find("li").`@data-index`), "update": false} : {"index": -1}
+                                apply="write(,mergeByIndex)" transform='($.type = "change")
+                                
+                                ? ($trim($.target.value) 
+                                    ? {"index": $number($find("li").`@data-index`), "update": { "title": $.target.value }} 
+                                    : {"index": $number($find("li").`@data-index`), "update": false} )
+
+                                : (((($.key = "Enter") or ($.key = "Tab") or ($.type = "change") or ($.type = "blur")) and $not($.target.value)) 
+                                ? {"index": $number($find("li").`@data-index`), "update": false} : {"index": -1})
                             '>
 
 
