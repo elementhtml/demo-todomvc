@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
-    <script type="module" src="../element/element.js?load&expose"></script>
+    <script type="module"
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bd60c9f91085134644c917bdddbd4b3c0d8e714f/element.js?load&expose'></script>
 </head>
 
 <body>
@@ -18,7 +19,7 @@
             content-type="json" transform="[]+"
             data-merge-by-index='$filter($map($value, function($t, $i) { $i = $.index ? ($.update ? $merge([$t, $.update]) : false) : $t }), function($v) { $v })'
             data-toggle-complete-all='$map($value, function($t) { $merge([$t, {"completed": $}])})'>
-        <meta is="e-data" resource="|#router|!change" target="#storage" apply="!change" force>
+        <meta is="e-data" resource="|#router|!change" target="#storage" apply="!change" force id="test">
         <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()"
             transform='($t:=$trim($); $length($t)>0 ? {"id": $id, "title": $t, "completed": false} : null)'>
         <meta is="e-data" resource="#storage|_" transform='(
