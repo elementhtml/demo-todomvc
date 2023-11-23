@@ -15,9 +15,9 @@
             }
         }
     </script>
-    <script type="module" src='../element/element.js?load&expose&packages=main'></script>
-    <!-- <script type="module" -->
-    <!-- src='https://cdn.jsdelivr.net/gh/elementhtml/element@a894a2db8d386e22ba3c43253eb81ab4a82acd7b/element.js?load&expose&packages=main'></script> -->
+    <script type="module"
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@f4fe89d10258adc15f6a46ec6adb88f44f2f0a9c/element.js?load&expose&packages=main'></script>
+    <meta is="e-theme" id="theme">
 </head>
 
 <body>
@@ -26,21 +26,7 @@
         <meta is="e-pipe" id="storage" source="$sources.localStorage" content-type="json" transform="[]+">
         <meta is="e-data" resource="|#router|!change" target="#storage" apply="!change" force>
         <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()" transform='$updates.add'>
-        <meta is="e-data" resource="#storage|_" transform='(
-            $s := $substringAfter($this.baseURI, "#/");
-            $numCompleted := $count($filter($,function($v){$v.completed})); $numAll := $count($); $numActive := $numAll - $numCompleted; {
-            "`#toggle-all`.checked": $numCompleted = $numAll, 
-            "`.new-todo`": "", 
-            "`.todo-list`": [$filter([$map($, function($t, $i) {{"@id": $t.id, "@data-index": $i, "@class": $t.completed ? "completed" : "active", 
-                "`label`": $t.title, "`.toggle`.checked": $t.completed}})], function($t) { $s ? $t.`@class` = $s : true })], 
-            "`footer .todo-count strong`": $numActive, 
-            "`footer .todo-count span`": $numActive = 1 ? "item" : "items", 
-            "`footer .clear-completed`completed": $numCompleted, 
-            "`.todo-list`@data-state": $s ? ($s = "active" ? "active" : "completed" ) : null , 
-            "`footer a[href=\"#/completed\"]`@class": $s ? ($s = "active" ? "" : "selected" ) : "", 
-            "`footer a[href=\"#/active\"]`@class": $s ? ($s = "active" ? "selected" : "" ) : "", 
-            "`footer a[href=\"#/\"]`@class": $s ? "" : "selected"
-        })'>
+        <meta is="e-data" resource="#storage|_" transform='$render'>
         <meta is="e-data" resource="|#toggle-all|!change" target="#storage" transform='$.target.checked'
             apply='write(,$updates.toggleCompleteAll)'>
         <meta is="e-data" resource="|footer .clear-completed|!click" target=".todoapp|li.completed{}"
@@ -57,22 +43,13 @@
                     <li>
                         <div class="view">
                             <meta is="e-data" resource="|input|!click" target="#storage"
-                                apply="write(,$updates.mergeByIndex)"
-                                transform='{"index": $number($find("li").`@data-index`), "update": {"completed": $.target.checked ? true : false }}'>
+                                transform='$updates.updateCurrentIndex' apply="write(,$updates.mergeByIndex)">
                             <meta is="e-data" resource="|.destroy|!click" target="#storage"
-                                apply="write(,$updates.mergeByIndex)"
-                                transform='{"index": $number($find("li").`@data-index`), "update": false}'>
-                            <meta is="e-data" resource="|label|_dblclick" target="li|" force
-                                transform='{"@class": "editing", "@data-class": $find("li").`@class`, "`.edit`.value": $, "`.edit`.focus()": null}'>
-                            <meta is="e-data" resource="li|.edit|!keydown" target="li|"
-                                transform='($class := $find("li").`@data-class`; $.key = "Escape" ? {"@class": $class, "@data-class": null, "`.edit`.value": $find("li|label").textContent } : {})'>
+                                transform='$updates.removeCurrentIndex' apply="write(,$updates.mergeByIndex)">
+                            <meta is="e-data" resource="|label|_dblclick" target="li|" transform='$openEdit' force>
+                            <meta is="e-data" resource="li|.edit|!keydown" target="li|" transform='$revertOnEsc'>
                             <meta is="e-data" resource="li|.edit|!keydown,blur,change" target="#storage"
-                                apply="write(,$updates.mergeByIndex)" transform='($.type = "change")
-                                ? ($trim($.target.value) 
-                                    ? {"index": $number($find("li").`@data-index`), "update": { "title": $trim($.target.value) }} 
-                                    : {"index": $number($find("li").`@data-index`), "update": false} )
-                                : (((($.key = "Enter") or ($.key = "Tab") or ($.type = "change") or ($.type = "blur")) and $not($trim($.target.value))) 
-                                    ? {"index": $number($find("li").`@data-index`), "update": false} : {"index": -1})'>
+                                transform='$saveEdit' apply="write(,$updates.mergeByIndex)">
                             <input class="toggle" type="checkbox">
                             <label></label>
                             <button class="destroy"></button>
