@@ -18,13 +18,13 @@
     <script type="module"
         src='https://cdn.jsdelivr.net/gh/elementhtml/element@f4fe89d10258adc15f6a46ec6adb88f44f2f0a9c/element.js?load&expose&packages=main'></script>
     <meta is="e-theme" id="theme">
+    <meta is="e-router" id="router">
 </head>
 
 <body>
     <section class="todoapp">
-        <meta is="e-router" id="router">
         <meta is="e-pipe" id="storage" source="$sources.localStorage" content-type="json" transform="[]+">
-        <meta is="e-data" resource="|#router|!change" target="#storage" apply="!change" force>
+        <meta is="e-data" resource=":|#router|!change" target="#storage" apply="!change" force>
         <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()" transform='$updates.add'>
         <meta is="e-data" resource="#storage|_" transform='$render'>
         <meta is="e-data" resource="|#toggle-all|!change" target="#storage" transform='$.target.checked'
