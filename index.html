@@ -33,12 +33,13 @@
         <li>
             <div class="view">
                 <meta is="e-map"
-                    :='|input >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })] >> todos'>
+                    :='|.toggle >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })] >> todos'>
+                <meta is="e-map" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
             </div>
-            <input class="edit" value="">
+            <input class="edit">
         </li>
     </template>
 
