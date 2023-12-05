@@ -32,7 +32,10 @@
     <meta is="e-cmap" :='todos >> ( $numCompleted := $count([$filter($, function($t){ $t.completed })]); $numActive := $count($) - $numCompleted ; {
         "`:|.new-todo`": {"value": "", "focus()": true}, 
         "`:|#toggle-all`": {"checked": $numCompleted = $count($) },
-        "`:|footer`": {"`.todo-count`": {"<>": $numActive = 1 ? "<strong>1</strong> item left" : ("<strong>" & $numActive & "</strong> items left")  } }, 
+        "`:|footer`": {
+            "`.todo-count`": {"<>": $numActive = 1 ? "<strong>1</strong> item left" : ("<strong>" & $numActive & "</strong> items left")  }, 
+            "`.clear-completed`": {"^display": $numCompleted ? "block" : "none"} 
+        },
         "<%:|template%>": [$map($, function($t){ { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), 
             "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } } })]
     }) >> :|.todo-list'>
