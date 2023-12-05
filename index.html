@@ -27,7 +27,7 @@
         :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
     <meta is="e-cmap" :='todos >> {
         "`:|.new-todo`": {"value": "", "focus()": true}, 
-        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed, "&editing": $t.editing, "`.edit`": {"value": $t.title, "focus()": true } } })]
+        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed, "&editing": $boolean($t.editing), "`.edit`": {"value": $t.title, "focus()": true } } })]
     } >> :|.todo-list'>
     <template>
         <li>
@@ -36,14 +36,17 @@
                     :='|.toggle >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })] >> todos'>
                 <meta is="e-cmap" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
                 <meta is="e-cmap"
-                    :='!dblclick|label >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"editing": true }]) : $t })] >> todos'>
+                    :='!dblclick|label >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"editing": $t.title }]) : $t })] >> todos'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
             </div>
-            <meta is="e-cmap" :='|.edit >> ( $val := $trim($.value) ; $val  
-                    ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"title": $val, "editing": null }]) : $t })] 
+            <meta is="e-cmap" :='!change,focusout|.edit >> ($val := $trim($.value) ; $val  
+                    ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"title": $val, "editing": null}]) : $t })] 
                     : [$filter($cell, function($t){ $t.id != $find("li|").id })] ) >> todos'>
+            <meta is="e-cmap" :='!keydown|.edit >> ( $event.key = "Escape" 
+                ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"title": $t.editing, "editing": null}]) : $t })]
+                : $stop() ) >> todos'>
             <input class="edit">
         </li>
     </template>
