@@ -29,12 +29,13 @@
     <meta is="e-cmap"
         :=':|#toggle-all >> [$map($cell, function($t){ $merge([$t, {"completed": $.checked }]) })] >> todos'>
 
-    <meta is="e-cmap" :='todos >> {
+    <meta is="e-cmap" :='todos >> ( $numCompleted := $count([$filter($, function($t){ $t.completed })]); $numActive := $count($) - $numCompleted ; {
         "`:|.new-todo`": {"value": "", "focus()": true}, 
-        "`:|#toggle-all`": {"checked": $count([$filter($, function($t){ $t.completed })]) = $count($) },
+        "`:|#toggle-all`": {"checked": $numCompleted = $count($) },
+        "`:|footer`": {"`.todo-count`": {"<>": $numActive = 1 ? "<strong>1</strong> item left" : ("<strong>" & $numActive & "</strong> items left")  } }, 
         "<%:|template%>": [$map($, function($t){ { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), 
             "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } } })]
-    } >> :|.todo-list'>
+    }) >> :|.todo-list'>
 
     <template>
         <li>
@@ -72,7 +73,7 @@
             <ul class="todo-list"></ul>
         </main>
         <footer>
-            <span class="todo-count"><strong>0</strong> <span>item</span> left</span>
+            <span class="todo-count"><strong>0</strong> items left</span>
             <ul class="filters">
                 <li>
                     <a href="#/">All</a>
