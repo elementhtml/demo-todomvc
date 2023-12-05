@@ -26,7 +26,7 @@
     <meta is="e-map"
         :=':|.new-todo >> [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] >> todos'>
     <meta is="e-map" :='todos >> {
-        "<%template%>": [$map($, function($t){ { "@id": $t.id, "`label`": $t.title } })]
+        "<%template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed  } })]
     } >> :|.todo-list'>
 
 
