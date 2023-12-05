@@ -23,18 +23,20 @@
 
     <meta is="e-pipe" :="`sessionStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
         content-type="json">
-    <meta is="e-map"
+    <meta is="e-cmap"
         :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
-    <meta is="e-map" :='todos >> {
+    <meta is="e-cmap" :='todos >> {
         "`:|.new-todo`": {"value": "", "focus()": true}, 
-        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed  } })]
+        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed, "&editing": $t.editing, "`.edit`": {"value": $t.title, "focus()": true } } })]
     } >> :|.todo-list'>
     <template>
         <li>
             <div class="view">
-                <meta is="e-map"
+                <meta is="e-cmap"
                     :='|.toggle >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })] >> todos'>
-                <meta is="e-map" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
+                <meta is="e-cmap" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
+                <meta is="e-cmap"
+                    :='!dblclick|label >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"editing": true }]) : $t })] >> todos'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
