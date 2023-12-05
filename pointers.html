@@ -15,31 +15,22 @@
             }
         }
     </script>
-    <script type="module" src='../element/element.js?load&expose'></script>
-    <!-- <script type="module"
-    src='https://cdn.jsdelivr.net/gh/elementhtml/element@f4fe89d10258adc15f6a46ec6adb88f44f2f0a9c/element.js?load&expose&packages=main'></script> -->
-    <link rel="stylesheet" href="theme/dark.css">
+    <script type="module"
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@f4fe89d10258adc15f6a46ec6adb88f44f2f0a9c/element.js?load&expose&packages=main'></script>
+    <meta is="e-theme" id="theme">
     <meta is="e-router" id="router">
-
-    <meta is="e-pipe" :="`sessionStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
-        content-type="json">
-    <meta is="e-map"
-        :=':|.new-todo >> [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] >> todos'>
-    <meta is="e-map" :='todos >> {
-        "<%template%>": [$map($, function($t){ { "@id": $t.id, "`label`": $t.title } })]
-    } >> :|.todo-list'>
-
-
-
-    <!-- <meta is="e-map" :=':|input[name=todo] >> [$append($cell, $.value)] >> todos'>
-    <meta is="e-map"
-        :='todos >> {"<li>": $, "`:|form`": {"!": null, "`input`": {"value": "", "focus()": true}}} >> :|#todos'> -->
-
-
 </head>
 
 <body>
     <section class="todoapp">
+        <meta is="e-pipe" id="storage" source="$sources.localStorage" content-type="json" transform="[]+">
+        <meta is="e-data" resource=":|#router|!change" target="#storage" apply="!change" force>
+        <meta is="e-data" resource="|.new-todo|_" target="#storage" apply="write()" transform='$updates.add'>
+        <meta is="e-data" resource="#storage|_" transform='$render'>
+        <meta is="e-data" resource="|#toggle-all|!change" target="#storage" transform='$.target.checked'
+            apply='write(,$updates.toggleCompleteAll)'>
+        <meta is="e-data" resource="|footer .clear-completed|!click" target=".todoapp|li.completed{}"
+            transform='{"`.destroy`!": ""}'>
         <header class="header">
             <h1>todos</h1>
             <input class="new-todo" placeholder="What needs to be done?" autofocus>
@@ -51,6 +42,14 @@
                 <template>
                     <li>
                         <div class="view">
+                            <meta is="e-data" resource="|input|!click" target="#storage"
+                                transform='$updates.updateCurrentIndex' apply="write(,$updates.mergeByIndex)">
+                            <meta is="e-data" resource="|.destroy|!click" target="#storage"
+                                transform='$updates.removeCurrentIndex' apply="write(,$updates.mergeByIndex)">
+                            <meta is="e-data" resource="|label|_dblclick" target="li|" transform='$openEdit' force>
+                            <meta is="e-data" resource="li|.edit|!keydown" target="li|" transform='$revertOnEsc'>
+                            <meta is="e-data" resource="li|.edit|!keydown,blur,change" target="#storage"
+                                transform='$saveEdit' apply="write(,$updates.mergeByIndex)">
                             <input class="toggle" type="checkbox">
                             <label></label>
                             <button class="destroy"></button>
