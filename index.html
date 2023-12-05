@@ -41,6 +41,8 @@
                 <label></label>
                 <button class="destroy"></button>
             </div>
+            <meta is="e-cmap"
+                :='|.edit >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"title": $.value, "editing": null }]) : $t })] >> todos'>
             <input class="edit">
         </li>
     </template>
