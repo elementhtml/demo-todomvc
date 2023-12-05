@@ -28,6 +28,7 @@
         :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
     <meta is="e-cmap"
         :=':|#toggle-all >> [$map($cell, function($t){ $merge([$t, {"completed": $.checked }]) })] >> todos'>
+    <meta is="e-cmap" :=':|.clear-completed >> [$filter($cell, function($t){ $not($t.completed) })] >> todos'>
 
     <meta is="e-cmap" :='todos >> ( $numCompleted := $count([$filter($, function($t){ $t.completed })]); $numActive := $count($) - $numCompleted ; {
         "`:|.new-todo`": {"value": "", "focus()": true}, 
