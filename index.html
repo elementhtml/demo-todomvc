@@ -24,10 +24,21 @@
     <meta is="e-pipe" :="`sessionStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
         content-type="json">
     <meta is="e-map"
-        :=':|.new-todo >> [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] >> todos'>
+        :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
     <meta is="e-map" :='todos >> {
-        "<%template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed  } })]
+        "`:|.new-todo`": {"value": "", "focus()": true}, 
+        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed  } })]
     } >> :|.todo-list'>
+    <template>
+        <li>
+            <div class="view">
+                <input class="toggle" type="checkbox">
+                <label></label>
+                <button class="destroy"></button>
+            </div>
+            <input class="edit" value="">
+        </li>
+    </template>
 
 
 </head>
@@ -41,18 +52,7 @@
         <main>
             <input id="toggle-all" class="toggle-all" type="checkbox">
             <label for="toggle-all">Mark all as complete</label>
-            <ul class="todo-list">
-                <template>
-                    <li>
-                        <div class="view">
-                            <input class="toggle" type="checkbox">
-                            <label></label>
-                            <button class="destroy"></button>
-                        </div>
-                        <input class="edit" value="">
-                    </li>
-                </template>
-            </ul>
+            <ul class="todo-list"></ul>
         </main>
         <footer>
             <span class="todo-count"><strong>0</strong> <span>item</span> left</span>
