@@ -23,12 +23,19 @@
 
     <meta is="e-pipe" :="`sessionStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
         content-type="json">
+
     <meta is="e-cmap"
         :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
+    <meta is="e-cmap"
+        :=':|#toggle-all >> [$map($cell, function($t){ $merge([$t, {"completed": $.checked }]) })] >> todos'>
+
     <meta is="e-cmap" :='todos >> {
         "`:|.new-todo`": {"value": "", "focus()": true}, 
-        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "`label`": $t.title, "&completed": $t.completed, "&editing": $boolean($t.editing), "`.edit`": {"value": $t.title, "focus()": true } } })]
+        "`:|#toggle-all`": {"checked": $count([$filter($, function($t){ $t.completed })]) = $count($) },
+        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), 
+            "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } } })]
     } >> :|.todo-list'>
+
     <template>
         <li>
             <div class="view">
@@ -50,7 +57,6 @@
             <input class="edit">
         </li>
     </template>
-
 
 </head>
 
