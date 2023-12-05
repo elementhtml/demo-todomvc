@@ -41,8 +41,9 @@
                 <label></label>
                 <button class="destroy"></button>
             </div>
-            <meta is="e-cmap"
-                :='|.edit >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"title": $.value, "editing": null }]) : $t })] >> todos'>
+            <meta is="e-cmap" :='|.edit >> ( $val := $trim($.value) ; $val  
+                    ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"title": $val, "editing": null }]) : $t })] 
+                    : [$filter($cell, function($t){ $t.id != $find("li|").id })] ) >> todos'>
             <input class="edit">
         </li>
     </template>
