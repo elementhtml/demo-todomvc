@@ -35,10 +35,11 @@
         "`:|#toggle-all`": {"checked": $numCompleted = $count($) },
         "`:|footer`": {
             "`.todo-count`": {"<>": $numActive = 1 ? "<strong>1</strong> item left" : ("<strong>" & $numActive & "</strong> items left")  }, 
-            "`.clear-completed`": {"^display": $numCompleted ? "block" : "none"} 
+            "`.clear-completed`": {"^display": $numCompleted ? null : "none"} 
         },
-        "<%:|template%>": [$map($, function($t){ { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), 
-            "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } } })]
+        "<%:|template%>": [$map($, function($t){ ( $state := $t.completed ? "completed" : "active" ; 
+            { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), "^display": $hash and $hash != $state ? "none" : null, 
+                "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } }) })]
     }) >> :|.todo-list'>
 
     <template>
