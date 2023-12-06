@@ -24,7 +24,7 @@
 
     <meta is="e-pipe" :="${~storage.session}" sync="todos" content-type="json">
 
-    <meta is="e-cmap" :=':|#router >> ( $getCell("todos")) >> todos' force>
+    <meta is="e-cmap" :=':|#router >> ${~defaults.transform} >> todos' force>
 
     <meta is="e-cmap"
         :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
