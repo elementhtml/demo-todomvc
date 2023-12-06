@@ -1,0 +1,3 @@
+( $event.key = "Escape" 
+    ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"esc": $t.editing, "editing": null}]) : $t })]
+    : $stop() )

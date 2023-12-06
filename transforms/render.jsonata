@@ -1,0 +1,12 @@
+( $numCompleted := $count([$filter($, function($t){ $t.completed })]); $numActive := $count($) - $numCompleted ; {
+        "`:|.new-todo`": {"value": "", "focus()": true}, 
+        "`:|#toggle-all`": {"checked": $numCompleted = $count($) },
+        "`:|footer`": {
+            "`.todo-count`": {"<>": $numActive = 1 ? "<strong>1</strong> item left" : ("<strong>" & $numActive & "</strong> items left")  }, 
+            "`.clear-completed`": {"^display": $numCompleted ? null : "none"} 
+        },
+        "<%:|template%>": ( $hash := $substring($lookup($lookup($find(":|#router"), "value"), "hash"), 2) ;             
+            [$map($, function($t){ ( $state := $t.completed ? "completed" : "active" ;  
+                { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), "^display": ($hash and $hash != $state) ? "none" : null , 
+                    "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } }) })])
+    })

@@ -15,54 +15,32 @@
             }
         }
     </script>
-    <script type="module" src='../element/element.js?load&expose&packages=main'></script>
-    <!-- <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@d92637233d0ed2fb178a3d936c6359b3a365e7f1/element.js?load&expose&packages=main'></script> -->
+    <!-- <script type="module" src='../element/element.js?load&expose&packages=main'></script> -->
+    <script type="module"
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bf090d4a0f9ca221986397d1ada6fa30be84a8ae/element.js?load&expose&packages=main'></script>
     <link rel="stylesheet" href="theme/dark.css">
 
     <meta is="e-router" id="router">
+    <meta is="e-pipe" :="${~storage.local}" sync="todos" content-type="json">
 
-    <meta is="e-pipe" :="${~storage.session}" sync="todos" content-type="json">
-
-    <meta is="e-cmap" :=':|#router >> ${~defaults.transform} >> todos' force>
-
-    <meta is="e-cmap"
-        :=':|.new-todo >> ($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell) >> todos'>
-    <meta is="e-cmap"
-        :=':|#toggle-all >> [$map($cell, function($t){ $merge([$t, {"completed": $.checked }]) })] >> todos'>
-    <meta is="e-cmap" :=':|.clear-completed >> [$filter($cell, function($t){ $not($t.completed) })] >> todos'>
-
-    <meta is="e-cmap" :='todos >> ( $numCompleted := $count([$filter($, function($t){ $t.completed })]); $numActive := $count($) - $numCompleted ; {
-        "`:|.new-todo`": {"value": "", "focus()": true}, 
-        "`:|#toggle-all`": {"checked": $numCompleted = $count($) },
-        "`:|footer`": {
-            "`.todo-count`": {"<>": $numActive = 1 ? "<strong>1</strong> item left" : ("<strong>" & $numActive & "</strong> items left")  }, 
-            "`.clear-completed`": {"^display": $numCompleted ? null : "none"} 
-        },
-        "<%:|template%>": ( $hash := $substring($lookup($lookup($find(":|#router"), "value"), "hash"), 2) ;             
-            [$map($, function($t){ ( $state := $t.completed ? "completed" : "active" ;  
-                { "#": $t.id, "&completed": $t.completed, "&editing": $boolean($t.editing), "^display": ($hash and $hash != $state) ? "none" : null , 
-                    "`.edit`": {"value": $t.title, "focus()": true }, "`label`": $t.title, "`.toggle`": {"checked": $t.completed } }) })])
-    }) >> :|.todo-list'>
+    <meta is="e-cmap" :='todos >> jsonata://transforms/render >> :|.todo-list'>
+    <meta is="e-cmap" :=':|#router >> jsonata://transforms/routing >> todos' force>
+    <meta is="e-cmap" :=':|.new-todo >> jsonata://transforms/new-todo >> todos'>
+    <meta is="e-cmap" :=':|#toggle-all >> jsonata://transforms/toggle-all >> todos'>
+    <meta is="e-cmap" :=':|.clear-completed >> jsonata://transforms/clear-completed >> todos'>
 
     <template>
         <li>
             <div class="view">
-                <meta is="e-cmap"
-                    :='|.toggle >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })] >> todos'>
-                <meta is="e-cmap" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
-                <meta is="e-cmap"
-                    :='!dblclick|label >> [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"editing": $t.title }]) : $t })] >> todos'>
+                <meta is="e-cmap" :='|.toggle >> jsonata://transforms/toggle >> todos'>
+                <meta is="e-cmap" :='|.destroy >> jsonata://transforms/destroy >> todos'>
+                <meta is="e-cmap" :='!dblclick|label >> jsonata://transforms/edit-open >> todos'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
             </div>
-            <meta is="e-cmap" :='!change,focusout|.edit >> ($val := $trim($.value) ; $val  
-                    ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $sift($merge([$t, {"title": $t.esc ? $t.esc : $val, "editing": null, "esc": null}]), function($v) { $v != null }) : $t })] 
-                    : [$filter($cell, function($t){ $t.id != $find("li|").id })] ) >> todos'>
-            <meta is="e-cmap" :='!keydown|.edit >> ( $event.key = "Escape" 
-                ? [$map($cell, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"esc": $t.editing, "editing": null}]) : $t })]
-                : $stop() ) >> todos'>
+            <meta is="e-cmap" :='!change,focusout|.edit >> jsonata://transforms/edit-close >> todos'>
+            <meta is="e-cmap" :='!keydown|.edit >> jsonata://transforms/edit-abort >> todos'>
             <input class="edit">
         </li>
     </template>

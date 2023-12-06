@@ -1,0 +1,1 @@
+($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell)
