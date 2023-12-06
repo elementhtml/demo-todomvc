@@ -15,15 +15,14 @@
             }
         }
     </script>
-    <script type="module" src='../element/element.js?load&expose'></script>
+    <script type="module" src='../element/element.js?load&expose&packages=main'></script>
     <!-- <script type="module"
     src='https://cdn.jsdelivr.net/gh/elementhtml/element@d92637233d0ed2fb178a3d936c6359b3a365e7f1/element.js?load&expose&packages=main'></script> -->
     <link rel="stylesheet" href="theme/dark.css">
 
     <meta is="e-router" id="router">
 
-    <meta is="e-pipe" :="`localStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
-        content-type="json">
+    <meta is="e-pipe" :="$storage.localStorage" sync="todos" content-type="json">
 
     <meta is="e-cmap" :=':|#router >> ( $getCell("todos")) >> todos' force>
 
