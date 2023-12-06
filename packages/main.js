@@ -1,7 +1,10 @@
 export default {
     variables: {
         storage: {
-            localStorage: '`localStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`'
-        }
+            local: '`localStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`',
+            session: '`sessionStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`'
+        },
+        defaultCell: 'todos',
+        testFunc: (arg1, arg2) => { console.log('main.js: line 8', arg1, arg2); return arg1 + arg2; }
     }
 }

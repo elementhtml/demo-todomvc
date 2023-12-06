@@ -22,7 +22,8 @@
 
     <meta is="e-router" id="router">
 
-    <meta is="e-pipe" :="${~storage.session}" sync="todos" content-type="json">
+    <meta is="e-pipe" :="`sessionStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
+        content-type="json">
 
     <meta is="e-cmap" :=':|#router >> ( $getCell("todos")) >> todos' force>
 
