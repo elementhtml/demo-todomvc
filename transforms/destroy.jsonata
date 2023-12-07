@@ -1,1 +1,0 @@
-[$filter($cell, function($t){ $t.id != $find("li|").id })]

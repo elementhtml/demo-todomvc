@@ -8,32 +8,24 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
-    <script type="importmap">
-        {
-            "imports": {
-                "main": "./packages/main.js"
-            }
-        }
-    </script>
     <!-- <script type="module" src='../element/element.js?load&expose&packages=main'></script> -->
     <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bf090d4a0f9ca221986397d1ada6fa30be84a8ae/element.js?load&expose&packages=main'></script>
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bd6d76654725e3ae8ef98001d3947e4ed6d5ad78/element.js?load'></script>
     <link rel="stylesheet" href="theme/dark.css">
 
     <meta is="e-router" id="router">
-    <meta is="e-pipe" :="${~storage.local}" sync="todos" content-type="json">
-
+    <meta is="e-pipe" :="`localStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
+        content-type="json">
     <meta is="e-cmap" :='todos >> jsonata://transforms/render >> :|.todo-list'>
-    <meta is="e-cmap" :=':|#router >> jsonata://transforms/routing >> todos' force>
+    <meta is="e-cmap" :=':|#router >> $getCell("todos") >> todos' force>
     <meta is="e-cmap" :=':|.new-todo >> jsonata://transforms/new-todo >> todos'>
     <meta is="e-cmap" :=':|#toggle-all >> jsonata://transforms/toggle-all >> todos'>
-    <meta is="e-cmap" :=':|.clear-completed >> jsonata://transforms/clear-completed >> todos'>
-
+    <meta is="e-cmap" :=':|.clear-completed >> [$filter($cell, function($t){ $not($t.completed) })] >> todos'>
     <template>
         <li>
             <div class="view">
                 <meta is="e-cmap" :='|.toggle >> jsonata://transforms/toggle >> todos'>
-                <meta is="e-cmap" :='|.destroy >> jsonata://transforms/destroy >> todos'>
+                <meta is="e-cmap" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
                 <meta is="e-cmap" :='!dblclick|label >> jsonata://transforms/edit-open >> todos'>
                 <input class="toggle" type="checkbox">
                 <label></label>
