@@ -9,36 +9,31 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="theme/dark.css">
-    <script type="module" src='../element/element.js?load&expose'></script>
-    <!-- <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bd6d76654725e3ae8ef98001d3947e4ed6d5ad78/element.js?load'></script> -->
+    <!-- <script type="module" src='../element/element.js?load&expose&packages=main'></script> -->
+    <script type="module"
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bd6d76654725e3ae8ef98001d3947e4ed6d5ad78/element.js?load'></script>
 
 
     <meta is="e-router" id="router">
-
-    <meta is="e-proxy" :="todos << $ << store`sessionStorage.getItem('todos-elementhtml', $)`" content-type="json">
-    <meta is="e-proxy" :="todos >> $ >> store`sessionStorage.setItem('todos-elementhtml', $)`" content-type="json">
-
-    <meta is="e-dom" :="todos >> `jsonata://transforms/render` >> :|.todo-list">
-
-    <meta is="e-dom" :='todos << $getCell("todos") << ~|#router' force>
-    <meta is="e-dom" :="todos << `jsonata://transforms/new-todo` << :|.new-todo">
-
-    <!-- <meta is="e-dom" :="todos << `jsonata://transforms/toggle-all` << :|#toggle-all"> -->
-    <!-- <meta is="e-dom" :="todos << [$filter($cell, function($t){ $not($t.completed) })] << :|.clear-completed"> -->
-
+    <meta is="e-pipe" :="`localStorage.setItem(todos-elementhtml) -> getItem(todos-elementhtml)`" sync="todos"
+        content-type="json">
+    <meta is="e-cmap" :='todos >> jsonata://transforms/render >> :|.todo-list'>
+    <meta is="e-cmap" :=':|#router >> $getCell("todos") >> todos' force>
+    <meta is="e-cmap" :=':|.new-todo >> jsonata://transforms/new-todo >> todos'>
+    <meta is="e-cmap" :=':|#toggle-all >> jsonata://transforms/toggle-all >> todos'>
+    <meta is="e-cmap" :=':|.clear-completed >> [$filter($cell, function($t){ $not($t.completed) })] >> todos'>
     <template>
         <li>
             <div class="view">
-                <!-- <meta is="e-dom" :="todos << `jsonata://transforms/toggle` << |.toggle"> -->
-                <!-- <meta is="e-dom" :='todos << [$filter($cell, function($t){ $t.id != $find("li|").id })] << |.destroy'> -->
-                <!-- <meta is="e-dom" :='todos << `jsonata://transforms/edit-open` << !dblclick|label'> -->
+                <meta is="e-cmap" :='|.toggle >> jsonata://transforms/toggle >> todos'>
+                <meta is="e-cmap" :='|.destroy >> [$filter($cell, function($t){ $t.id != $find("li|").id })] >> todos'>
+                <meta is="e-cmap" :='!dblclick|label >> jsonata://transforms/edit-open >> todos'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
             </div>
-            <!-- <meta is="e-dom" :="todos << `jsonata://transforms/edit-close` << !change,focusout|.edit"> -->
-            <!-- <meta is="e-dom" :="todos << `jsonata://transforms/edit-abort` << !keydown|.edit"> -->
+            <meta is="e-cmap" :='!change,focusout|.edit >> jsonata://transforms/edit-close >> todos'>
+            <meta is="e-cmap" :='!keydown|.edit >> jsonata://transforms/edit-abort >> todos'>
             <input class="edit">
         </li>
     </template>

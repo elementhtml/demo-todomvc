@@ -1,1 +1,1 @@
-($trim($.value) ? [$append($cell, {"id": $uuid(), "title": $.value, "completed": false})] : $cell)
+($trim($.value) ? [$append($cell.value ? [$cell.value] : [], {"id": $uuid(), "title": $.value, "completed": false})] : $cell.value)
