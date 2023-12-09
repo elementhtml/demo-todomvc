@@ -5,15 +5,21 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self';
+            script-src 'self' https://cdn.jsdelivr.net; script-src-elem 'self' blob: https://cdn.jsdelivr.net; script-src-attr 'none';
+            connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'">
+
     <link rel="preload" as="style" href="css/base.css">
     <link rel="preload" as="style" href="css/index.css">
     <link rel="preload" as="style" href="css/app.css">
 
     <!-- <link rel="modulepreload" href="../element/element.js?load&expose"> -->
     <link rel="modulepreload"
-        href="https://cdn.jsdelivr.net/gh/elementhtml/element@205f7d3173469498404dec21b2afaf74c841cfbc/element.js?load">
+        href="https://cdn.jsdelivr.net/gh/elementhtml/element@674287e54a04b0547fdd48bdd3874db9ac7e31f6/element.min.js?load">
 
     <title>ElementHTML • TodoMVC</title>
+    <meta name="description"
+        content="An implementation in ElementHTML of the TodoMVC example app for comparing web frameworks.">
 
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
@@ -21,7 +27,7 @@
 
     <!-- <script type="module" src='../element/element.js?load&expose'></script> -->
     <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@205f7d3173469498404dec21b2afaf74c841cfbc/element.js?load'></script>
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@674287e54a04b0547fdd48bdd3874db9ac7e31f6/element.min.js?load'></script>
 
     <meta is="e-router" id="router">
 
