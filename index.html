@@ -8,37 +8,37 @@
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
-    <link rel="stylesheet" href="theme/dark.css">
-    <script type="module" src='../element/element.js?load&expose'></script>
-    <!-- <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@bd6d76654725e3ae8ef98001d3947e4ed6d5ad78/element.js?load'></script> -->
 
+    <!-- <script type="module" src='../element/element.js?load&expose'></script> -->
+    <script type="module"
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@205f7d3173469498404dec21b2afaf74c841cfbc/element.js?load'></script>
 
     <meta is="e-router" id="router">
 
-    <meta is="e-proxy" :="todos << $ << store`sessionStorage.getItem('todos-elementhtml', $)`" content-type="json">
-    <meta is="e-proxy" :="todos >> $ >> store`sessionStorage.setItem('todos-elementhtml', $)`" content-type="json">
+    <meta is="e-proxy" :="todos << $ << store`localStorage.getItem('todos-elementhtml', $)`" content-type="json">
+    <meta is="e-proxy" :="todos >> $ >> store`localStorage.setItem('todos-elementhtml', $)`" content-type="json">
 
-    <meta is="e-dom" :="todos >> `jsonata://transforms/render` >> :|.todo-list">
+    <meta is="e-dom" :="todos >> `transforms/render.jsonata` >> :|.todo-list">
 
     <meta is="e-dom" :='todos << $getCell("todos") << ~|#router' force>
-    <meta is="e-dom" :="todos << `jsonata://transforms/new-todo` << :|.new-todo">
+    <meta is="e-dom" :="todos << `transforms/new-todo.jsonata` << :|.new-todo">
 
-    <!-- <meta is="e-dom" :="todos << `jsonata://transforms/toggle-all` << :|#toggle-all"> -->
-    <!-- <meta is="e-dom" :="todos << [$filter($cell, function($t){ $not($t.completed) })] << :|.clear-completed"> -->
+    <meta is="e-dom" :="todos << `transforms/toggle-all.jsonata` << :|#toggle-all">
+    <meta is="e-dom" :="todos << [$filter($cell.value, function($t){ $not($t.completed) })] << :|.clear-completed">
 
     <template>
         <li>
             <div class="view">
-                <!-- <meta is="e-dom" :="todos << `jsonata://transforms/toggle` << |.toggle"> -->
-                <!-- <meta is="e-dom" :='todos << [$filter($cell, function($t){ $t.id != $find("li|").id })] << |.destroy'> -->
-                <!-- <meta is="e-dom" :='todos << `jsonata://transforms/edit-open` << !dblclick|label'> -->
+                <meta is="e-dom" :="todos << `transforms/toggle.jsonata` << |.toggle">
+                <meta is="e-dom"
+                    :='todos << [$filter($cell.value, function($t){ $t.id != $find("li|").id })] << |.destroy'>
+                <meta is="e-dom" :='todos << `transforms/edit-open.jsonata` << |label!dblclick'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
             </div>
-            <!-- <meta is="e-dom" :="todos << `jsonata://transforms/edit-close` << !change,focusout|.edit"> -->
-            <!-- <meta is="e-dom" :="todos << `jsonata://transforms/edit-abort` << !keydown|.edit"> -->
+            <meta is="e-dom" :="todos << `transforms/edit-close.jsonata` << |.edit!change,focusout">
+            <meta is="e-dom" :="todos << `transforms/edit-abort.jsonata` << |.edit!keydown">
             <input class="edit">
         </li>
     </template>
