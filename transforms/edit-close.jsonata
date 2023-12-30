@@ -1,3 +1,3 @@
 ($val := $trim($.value) ; $val  
-    ? [$map($cell.value, function($t){ ($t.id = $find("li|").id) ? $sift($merge([$t, {"title": $t.esc ? $t.esc : $val, "editing": null, "esc": null}]), function($v) { $v != null }) : $t })] 
-    : [$filter($cell.value, function($t){ $t.id != $find("li|").id })] )
+    ? [$map($fields.todos, function($t){ ($t.id = $._closest.id) ? $sift($merge([$t, {"title": $t.esc ? $t.esc : $val, "editing": null, "esc": null}]), function($v) { $v != null }) : $t })] 
+    : [$filter($fields.todos, function($t){ $t.id != $._closest.id })] )

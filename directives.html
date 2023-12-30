@@ -28,29 +28,34 @@
 
     <!-- <script type="module" src='../element/element.js?load&expose'></script> -->
     <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@e6ac1b230215ffee185c9ccaa815256da8fc29ac/element.min.js?load'></script>
+        src='https://cdn.jsdelivr.net/gh/elementhtml/element@252def95d32dac7ef4004b973c7a92fa80bc433c/element.min.js?load'></script>
 
-    <script is="e-flow" type="script/flow">
-        `sessionStorage.getItem(todos-elementhtml)` >> ($ ? $eval($) : null) >> %todos >> ($ or ($type($) = "array") ? $string($) : null) 
-            >> `sessionStorage.setItem(todos-elementhtml, ${})`
-        %todos >> (`transforms/render.jsonata`) >> $(:|.todo-list)
-        $(:|.new-todo) >> (`transforms/new-todo.jsonata`) >> %todos
-        $(:|#toggle-all) >> (`transforms/toggle-all.jsonata`) >> %todos
-        $(:|.clear-completed) >> ([$filter($fields.todos, function($t){ ($type($t) = "object") and $not($t.completed)})]) >> %todos
-        $(:|.toggle) >> (`transforms/toggle.jsonata`) >> %todos
-        $(:|.destroy) >> ([$filter($fields.todos, function($t){ $t.id != $._closest.id })]) >> %todos
-        $(:|label!dblclick) >> (`transforms/edit-open.jsonata`) >> %todos
-        $(:|.edit!change,focusout) >> (`transforms/edit-close.jsonata`) >> %todos
-        $(:|.edit!keydown+) >> (`transforms/edit-abort.jsonata`) >> %todos
-    </script>
+    <meta is="e-router" id="router">
+
+    <meta is="e-proxy" :="todos << $ << store`localStorage.getItem('todos-elementhtml', $)`" content-type="json">
+    <meta is="e-proxy" :="todos >> $ >> store`localStorage.setItem('todos-elementhtml', $)`" content-type="json">
+
+    <meta is="e-dom" :="todos >> `transforms/render.jsonata` >> :|.todo-list">
+
+    <meta is="e-dom" :='todos << $getCell("todos") << ~|#router' force>
+    <meta is="e-dom" :="todos << `transforms/new-todo.jsonata` << :|.new-todo">
+
+    <meta is="e-dom" :="todos << `transforms/toggle-all.jsonata` << :|#toggle-all">
+    <meta is="e-dom" :="todos << [$filter($cell.value, function($t){ $not($t.completed) })] << :|.clear-completed">
 
     <template>
         <li>
             <div class="view">
+                <meta is="e-dom" :="todos << `transforms/toggle.jsonata` << |.toggle">
+                <meta is="e-dom"
+                    :='todos << [$filter($cell.value, function($t){ $t.id != $find("li|").id })] << |.destroy'>
+                <meta is="e-dom" :='todos << `transforms/edit-open.jsonata` << |label!dblclick'>
                 <input class="toggle" type="checkbox">
                 <label></label>
                 <button class="destroy"></button>
             </div>
+            <meta is="e-dom" :="todos << `transforms/edit-close.jsonata` << |.edit!change,focusout">
+            <meta is="e-dom" :="todos << `transforms/edit-abort.jsonata` << |.edit!keydown">
             <input class="edit">
         </li>
     </template>

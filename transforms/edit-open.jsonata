@@ -1,1 +1,1 @@
-[$map($cell.value, function($t){ ($t.id = $find("li|").id) ? $merge([$t, {"editing": $t.title }]) : $t })]
+[$map($fields.todos, function($t){ ($t.id = $._closest.id) ? $merge([$t, {"editing": $t.title }]) : $t })]
