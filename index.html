@@ -31,8 +31,8 @@
         src='https://cdn.jsdelivr.net/gh/elementhtml/element@e6ac1b230215ffee185c9ccaa815256da8fc29ac/element.min.js?load'></script>
 
     <script is="e-flow" type="script/flow">
-        `sessionStorage.getItem(todos-elementhtml)` >> ($ ? $eval($) : null) >> %todos >> ($ or ($type($) = "array") ? $string($) : null) 
-            >> `sessionStorage.setItem(todos-elementhtml, ${})`
+        `localStorage.getItem(todos-elementhtml)` >> ($ ? $eval($) : null) >> %todos >> ($ or ($type($) = "array") ? $string($) : null) 
+            >> `localStorage.setItem(todos-elementhtml, ${})`
         %todos >> (`transforms/render.jsonata`) >> $(:|.todo-list)
         $(:|.new-todo) >> (`transforms/new-todo.jsonata`) >> %todos
         $(:|#toggle-all) >> (`transforms/toggle-all.jsonata`) >> %todos
