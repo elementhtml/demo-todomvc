@@ -1,1 +1,1 @@
-([$map($fields.todos, function($t){ ($contains($._closest.id, $t.id)) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })])
+[$map($fields.todos, function($t){ ($contains($._closest.id, $t.id)) ? $merge([$t, {"completed": $not($t.completed) }]) : $t })]

@@ -36,15 +36,6 @@
         .todoapp footer {
             color: #333333;
         }
-
-        .todo-list li label {
-            transition: opacity 0.4s;
-        }
-
-        .todo-list li.completed label {
-            color: inherit;
-            opacity: 0.6;
-        }
     </style>
 
     <script type="module" src='https://cdn.jsdelivr.net/gh/elementhtml/element@1.0.2/element.js?load' async
@@ -60,7 +51,6 @@
         $(:|.clear-completed) >> ([$filter($fields.todos, function($t){ ($type($t) = "object") and $not($t.completed)})]) >> %todos
         $(:|.toggle) >> (`transforms/toggle.jsonata`) >> %todos
         $(:|.destroy) >> ([$filter($fields.todos, function($t){ $t.id != $._closest.id })]) >> %todos
-        $(:|label!click!) >> null
         $(:|label!dblclick) >> (`transforms/edit-open.jsonata`) >> %todos
         $(:|.edit!change,focusout) >> (`transforms/edit-close.jsonata`) >> %todos
         $(:|.edit!keydown+) >> (`transforms/edit-abort.jsonata`) >> %todos
