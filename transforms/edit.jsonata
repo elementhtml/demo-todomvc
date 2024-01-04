@@ -1,6 +1,0 @@
-(
-    [$map($fields.todos, function($t){ ($t.id = $._closest.id) ? $merge([$t,
-        $._event.type = "change" ? {"title": $trim($.value), "editing": null} : {}, 
-        $._event.type = "focusout" ? {"editing": null} : {}
-    ]) : $t })]
-)

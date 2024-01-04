@@ -1,5 +1,0 @@
-( 
-    $tag := "dragon" ; 
-    $tags := [$split("dragon",",")] ; 
-    $join([$filter($tags, function($t) { $t != $tag })] , ",") 
-)

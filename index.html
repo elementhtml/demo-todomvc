@@ -60,6 +60,7 @@
         $(:|.clear-completed) >> ([$filter($fields.todos, function($t){ ($type($t) = "object") and $not($t.completed)})]) >> %todos
         $(:|.toggle) >> (`transforms/toggle.jsonata`) >> %todos
         $(:|.destroy) >> ([$filter($fields.todos, function($t){ $t.id != $._closest.id })]) >> %todos
+        $(:|label!click!) >> null
         $(:|label!dblclick) >> (`transforms/edit-open.jsonata`) >> %todos
         $(:|.edit!change,focusout) >> (`transforms/edit-close.jsonata`) >> %todos
         $(:|.edit!keydown+) >> (`transforms/edit-abort.jsonata`) >> %todos

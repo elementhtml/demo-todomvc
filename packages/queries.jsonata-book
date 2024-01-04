@@ -1,1 +1,0 @@
-[{"kind":2,"language":"jsonata","value":"( \n    $tag := \"dragon\" ; \n    $tags := [$split(\"dragon\",\",\")] ; \n    $join([$filter($tags, function($t) { $t != $tag })] , \",\") \n)","outputs":[]}]
