@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self';
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'unsafe-inline' 'self';
             script-src 'self' https://cdn.jsdelivr.net; script-src-elem 'self' blob: https://cdn.jsdelivr.net; script-src-attr 'none';
             connect-src 'self' https://cdn.jsdelivr.net; object-src 'none'; base-uri 'self'">
 
@@ -13,10 +13,7 @@
     <link rel="preload" as="style" href="css/index.css">
     <link rel="preload" as="style" href="css/app.css">
 
-
-    <!-- <link rel="modulepreload" href="../element/element.js?load&expose"> -->
-    <link rel="modulepreload"
-        href="https://cdn.jsdelivr.net/gh/elementhtml/element@5dbad33b2dddff1547013e85919a0920795990a9/element.min.js?load">
+    <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/elementhtml/element@1.0.2/element.js?load">
 
     <title>ElementHTML • TodoMVC</title>
     <meta name="description"
@@ -26,14 +23,38 @@
     <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="css/app.css">
 
-    <!-- <script type="module" src='../element/element.js?load&expose'></script> -->
-    <script type="module"
-        src='https://cdn.jsdelivr.net/gh/elementhtml/element@5dbad33b2dddff1547013e85919a0920795990a9/element.min.js?load'></script>
+    <style>
+        body {
+            background: #f0f0f0;
+            color: #111111;
+        }
+
+        .todoapp h1 {
+            color: #af2f2f
+        }
+
+        .todoapp footer {
+            color: #333333;
+        }
+
+        .todo-list li label {
+            transition: opacity 0.4s;
+        }
+
+        .todo-list li.completed label {
+            color: inherit;
+            opacity: 0.6;
+        }
+    </style>
+
+    <script type="module" src='https://cdn.jsdelivr.net/gh/elementhtml/element@1.0.2/element.js?load' async
+        fetchpriority="low"></script>
 
     <script is="e-flowscript" type="script/flow">
+        # >> ($substringAfter($, "#/")) >> %state
         `localStorage.getItem(todos-elementhtml)` >> ($ ? $eval($) : null) >> %todos >> ($ or ($type($) = "array") ? $string($) : null) 
             >> `localStorage.setItem(todos-elementhtml, ${})`
-        %todos >> (`transforms/render.jsonata`) >> $(:|.todo-list)
+        %{todos, state} >> (`transforms/render.jsonata`) >> $(:|.todo-list)
         $(:|.new-todo) >> (`transforms/new-todo.jsonata`) >> %todos
         $(:|#toggle-all) >> (`transforms/toggle-all.jsonata`) >> %todos
         $(:|.clear-completed) >> ([$filter($fields.todos, function($t){ ($type($t) = "object") and $not($t.completed)})]) >> %todos
