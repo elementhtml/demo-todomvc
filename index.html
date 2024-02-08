@@ -13,7 +13,7 @@
     <link rel="preload" as="style" href="css/index.css">
     <link rel="preload" as="style" href="css/app.css">
 
-    <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/elementhtml/element@1.1.1/element.js?load">
+    <link rel="modulepreload" href="https://cdn.jsdelivr.net/gh/elementhtml/element@1.2.0/element.js?load">
 
     <title>ElementHTML • TodoMVC</title>
     <meta name="description"
@@ -38,34 +38,23 @@
         }
     </style>
 
-    <script type="module" src='https://cdn.jsdelivr.net/gh/elementhtml/element@1.1.1/element.js?load' async
+    <script type="module" src='https://cdn.jsdelivr.net/gh/elementhtml/element@1.2.0/element.js?load' async
         fetchpriority="low"></script>
 
     <script is="e-flowscript" type="script/flow">
-        # >> ($substringAfter($, "#/")) >> %state
-        `localStorage.getItem(todos-elementhtml)` >> ($ ? $eval($) : null) >> %todos >> ($ or ($type($) = "array") ? $string($) : null) 
+        # >> ($substringAfter($, "#/")) >> @state
+        `localStorage.getItem(todos-elementhtml)` >> ($ ? $eval($) : null) >> @todos >> ($ or ($type($) = "array") ? $string($) : null) 
             >> `localStorage.setItem(todos-elementhtml, ${})`
-        %{todos, state} >> (`transforms/render.jsonata`) >> $(:|.todo-list)
-        $(:|.new-todo) >> (`transforms/new-todo.jsonata`) >> %todos
-        $(:|#toggle-all) >> (`transforms/toggle-all.jsonata`) >> %todos
-        $(:|.clear-completed) >> ([$filter($fields.todos, function($t){ ($type($t) = "object") and $not($t.completed)})]) >> %todos
-        $(:|.toggle) >> (`transforms/toggle.jsonata`) >> %todos
-        $(:|.destroy) >> ([$filter($fields.todos, function($t){ $t.id != $._closest.id })]) >> %todos
-        $(:|label!dblclick) >> (`transforms/edit-open.jsonata`) >> %todos
-        $(:|.edit!change,focusout) >> (`transforms/edit-close.jsonata`) >> %todos
-        $(:|.edit!keydown+) >> (`transforms/edit-abort.jsonata`) >> %todos
+        @{todos, state} >> (`~/render.`) >> $(.todo-list)
+        $(.new-todo) >> (`~/new-todo.`) >> @todos
+        $(#toggle-all) >> (`~/toggle-all.`) >> @todos
+        $(.clear-completed) >> ([$filter($fields.todos, function($t){ ($type($t) = "object") and $not($t.completed)})]) >> @todos
+        $(.toggle) >> (`~/toggle.`) >> @todos
+        $(.destroy) >> ([$filter($fields.todos, function($t){ $t.id != $._closest.id })]) >> @todos
+        $(label!dblclick) >> (`~/edit-open.`) >> @todos
+        $(.edit!change,focusout) >> (`~/edit-close.`) >> @todos
+        $(.edit!keydown+) >> (`~/edit-abort.`) >> @todos
     </script>
-
-    <template>
-        <li>
-            <div class="view">
-                <input class="toggle" type="checkbox">
-                <label></label>
-                <button class="destroy"></button>
-            </div>
-            <input class="edit">
-        </li>
-    </template>
 
 </head>
 
